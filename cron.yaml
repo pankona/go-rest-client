@@ -1,4 +1,5 @@
 cron:
     - description: gomo-simra daily build
-      url: /.*
-      schedule: every 1 minutes
+      url: /trigger
+      timezone: Asia/Tokyo
+      schedule: every day 05:00

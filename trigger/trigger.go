@@ -1,11 +1,14 @@
-package main
+package trigger
 
 import (
-	"io/ioutil"
+	"fmt"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/urlfetch"
 )
 
 func getEnvVar(varName string) (result string) {
@@ -18,10 +21,16 @@ func getEnvVar(varName string) (result string) {
 	return ""
 }
 
-func main() {
+func createHttpClient(r *http.Request) *http.Client {
+	return urlfetch.Client(appengine.NewContext(r))
+}
 
+func init() {
+	http.HandleFunc("/trigger", handler)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
 	circleci_url := "https://circleci.com/api/v1/project/pankona/gomo-simra/tree/master"
-	client := &http.Client{}
 	query := url.Values{"circle-token": {getEnvVar("CIRCLECI_API_KEY")}}
 
 	req, _ := http.NewRequest(
@@ -32,10 +41,14 @@ func main() {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, _ := client.Do(req)
-	body, _ := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
+	client := createHttpClient(r)
+	resp, err := client.Do(req)
 
-	println(string(body))
-
+	if err == nil {
+		fmt.Fprint(w, "err == nil")
+		fmt.Fprint(w, resp)
+	} else {
+		fmt.Fprint(w, "err != nil")
+		fmt.Fprint(w, err)
+	}
 }
