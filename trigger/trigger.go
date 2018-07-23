@@ -1,7 +1,6 @@
 package trigger
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"os"
@@ -35,29 +34,48 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func circleCIBuild(w http.ResponseWriter, r *http.Request) {
-	circleci_url := "https://circleci.com/api/v1/project/pankona/gomo-simra/tree/master"
+	endpoint := "https://circleci.com/api/v1/project/pankona/gomo-simra/tree/master"
 	query := url.Values{"circle-token": {getEnvVar("CIRCLECI_API_KEY")}}
 
 	req, _ := http.NewRequest(
 		"POST",
-		circleci_url+"?"+query.Encode(),
+		endpoint+"?"+query.Encode(),
 		nil,
 	)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
 	client := createHttpClient(r)
-	resp, err := client.Do(req)
+	_, err := client.Do(req)
 
-	if err == nil {
-		fmt.Fprint(w, "err == nil")
-		fmt.Fprint(w, resp)
-	} else {
-		fmt.Fprint(w, "err != nil")
-		fmt.Fprint(w, err)
+	w.Header().Set("", "")
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
 	}
+	w.WriteHeader(200)
+	w.Write([]byte("OK"))
 }
 
 func dockerBuild(w http.ResponseWriter, r *http.Request) {
-	//curl -H "Content-Type: application/json" --data '{"docker_tag": "master"}' -X POST https://registry.hub.docker.com/u/pankona/gomo-simra/trigger/8e5d67eb-c9b3-4b1e-bde1-1cbaad06d47b/
+	endpoint := "https://registry.hub.docker.com/u/pankona/gomo-simra/trigger/" + getEnvVar("DOCKERHUB_TRIGGER_TOKEN") + "/"
+	query := url.Values{"docker_tag": {"master"}}
+
+	req, _ := http.NewRequest(
+		"POST",
+		endpoint+"?"+query.Encode(),
+		nil,
+	)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := createHttpClient(r)
+	_, err := client.Do(req)
+
+	w.Header().Set("", "")
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		w.WriteHeader(500)
+	}
+	w.WriteHeader(200)
+	w.Write([]byte("OK"))
 }
