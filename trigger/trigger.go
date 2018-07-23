@@ -24,11 +24,7 @@ func createHttpClient(r *http.Request) *http.Client {
 	return urlfetch.Client(appengine.NewContext(r))
 }
 
-func init() {
-	http.HandleFunc("/trigger", handler)
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	circleCIBuild(w, r)
 	dockerBuild(w, r)
 }
