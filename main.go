@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/pankona/gomo-simra-daily-build-trigger/trigger"
+	"github.com/pankona/trigger"
 	"google.golang.org/appengine"
 )
 

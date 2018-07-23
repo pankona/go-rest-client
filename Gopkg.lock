@@ -9,6 +9,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/pankona/trigger"
+  packages = ["."]
+  revision = "93fc720705d65b4e46516e6ad2bc0c7010306c90"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
   revision = "a680a1efc54dd51c040b3b5ce4939ea3cf2ea0d1"
@@ -33,6 +39,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "14c6b27e2a9a0021fabe408b8245f9c39fd24b60ba25142dad4bbb1087cf1241"
+  inputs-digest = "845aab49f133a6959b4b05cacc61ad6565ac0ca12e010ea2245d71caf0251963"
   solver-name = "gps-cdcl"
   solver-version = 1
