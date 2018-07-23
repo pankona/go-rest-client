@@ -11,7 +11,7 @@
   branch = "master"
   name = "github.com/pankona/trigger"
   packages = ["."]
-  revision = "93fc720705d65b4e46516e6ad2bc0c7010306c90"
+  revision = "ec0cfaf48994dc4ace1f210d39c114b24c17cae1"
 
 [[projects]]
   branch = "master"
