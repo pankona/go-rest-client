@@ -29,3 +29,6 @@ delete:
 
 versions:
 	@echo $(VERSIONS)
+
+clean:
+	rm -rf $(TMP_VENDOR)
